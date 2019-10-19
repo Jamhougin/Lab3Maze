@@ -26,10 +26,12 @@ When you are demoing the lab, you will be asked questions about the code. Use la
 Components:
 
 1: The Maze 
+
 The maze is stored as an array of chars . ‘0’ for a ground and ‘1’ for a wall. Use the sample program as a starting point.The 
 user enters a key to update the maze and redraw it.
 
-2:The Walkers 
+2:The Walkers
+
 Each walker is represented by an ‘2’ in the array.
 
 At the start of each game the walkers are randomly placed in the ground(anything that’s not a wall). The walkers cannot be placed on a 
@@ -43,6 +45,7 @@ After a walker has moved it must return the previous position to a ‘0’ for g
 If the walker hits a plant ( see below) the plant will be removed from the 2D Life.
 
 3: The Plants
+
 The plant is represented by a char from ‘a’ to ‘y’ in the array. The plants are randomly placed on the maze and they just stay in 
 one spot. 
 
@@ -51,6 +54,7 @@ it cycles back to ‘y’ . The plant only updates it’s value only if it can�
 is a walker in the same row or the same column,and if there is not a wall between it and the walker.
 
 4: Wander forever 
+
 Life is over when all the plants are gone, only walkers wandering the maze forever. Instead of printing the Maze, print 
 “Life Simulation Complete”.
 
