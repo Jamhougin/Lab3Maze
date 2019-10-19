@@ -4,14 +4,14 @@
 
 using namespace std;
 
-const int mazeSize = 15;
+const int numRows = 15;
+const int numCols = 15;
 int numOfPlants = 10;
 int numOfWalkers = 15;
 char plantsCanGrow = 'a';
 char block = 219;
 
-void drawMaze(char mz[mazeSize][mazeSize], int numRows, int numCols)
-{
+void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 	for (int row = 0; row < numRows; row++)
 	{
 		cout << "	";
@@ -24,35 +24,35 @@ void drawMaze(char mz[mazeSize][mazeSize], int numRows, int numCols)
 
 }
 
-void placePlant(char mz[mazeSize][mazeSize], int nOP) {
+void placePlant(char mz[numRows][numCols], int nOP) {
 	int count = 0;
 	srand(time(NULL));
 	while (count < nOP) {
-		int i = rand() % (mazeSize - 1) + 1;
-		int j = rand() % (mazeSize - 1) + 1;
+		int row = rand() % (numRows - 1) + 1;
+		int col = rand() % (numCols - 1) + 1;
 
-		if (mz[i][j] == ' ') {
-			mz[i][j] = 'y';
+		if (mz[row][col] == ' ') {
+			mz[row][col] = 'y';
 			count++;
 		}
 	}
 }
 
-void placeWalker(char mz[mazeSize][mazeSize]) {
+void placeWalker(char mz[numRows][numCols]) {
 	int count = 0;
 	srand(time(NULL));
 	while (count < numOfWalkers) {
-		int i = rand() % (mazeSize - 1) + 1;
-		int j = rand() % (mazeSize - 1) + 1;
+		int row = rand() % (numRows - 1) + 1;
+		int col = rand() % (numCols - 1) + 1;
 
-		if (mz[i][j] == ' ') {
-			mz[i][j] = '2';
+		if (mz[row][col] == ' ') {
+			mz[row][col] = '2';
 			count++;
 		}
 	}
 }
 
-void plantsGrow(char mz[mazeSize][mazeSize], int aR, int aC) {
+void plantsGrow(char mz[numRows][numCols], int aR, int aC) {
 	for (int adjRow = aR - 1; adjRow <= aR + 1; adjRow++) {
 		for (int adjCol = aC - 1; adjCol <= aC + 1; adjCol++) {
 			//Only move to position with ' '
@@ -67,12 +67,12 @@ void plantsGrow(char mz[mazeSize][mazeSize], int aR, int aC) {
 	}
 }
 
-void changePlants(char mz[mazeSize][mazeSize]) {
+void changePlants(char mz[numRows][numCols]) {
 	int canChange = 1;
 	int exitLoop = 0;
 
-	for (int arrRow = 1; arrRow < mazeSize - 1; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize - 1; arrCol++) {
+	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
+		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] >= 'a' && mz[arrRow][arrCol] <= 'y') {
 				canChange = 1;
 				exitLoop = 0;
@@ -139,8 +139,8 @@ void changePlants(char mz[mazeSize][mazeSize]) {
 			}
 		}
 	}
-	for (int arrRow = 1; arrRow < mazeSize - 1; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize - 1; arrCol++) {
+	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
+		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] == '?') {
 				mz[arrRow][arrCol] = 'y';
 			}
@@ -148,9 +148,9 @@ void changePlants(char mz[mazeSize][mazeSize]) {
 	}
 }
 
-void moveWalker(char mz[mazeSize][mazeSize]) {
-	for (int arrRow = 1; arrRow < mazeSize - 1; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize - 1; arrCol++) {
+void moveWalker(char mz[numRows][numCols]) {
+	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
+		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] == '2') {
 				int findSpace = 0;
 				for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
@@ -184,8 +184,8 @@ void moveWalker(char mz[mazeSize][mazeSize]) {
 		}
 	}
 	//Change placeholders to 2's
-	for (int arrRow = 1; arrRow < mazeSize; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize; arrCol++) {
+	for (int arrRow = 1; arrRow < numRows; arrRow++) {
+		for (int arrCol = 1; arrCol < numCols; arrCol++) {
 			if (mz[arrRow][arrCol] == 'X') {
 				mz[arrRow][arrCol] = '2';
 			}
@@ -193,190 +193,8 @@ void moveWalker(char mz[mazeSize][mazeSize]) {
 	}
 }
 
-/*void moveWalker(char mz[mazeSize][mazeSize]) {
-	//Search array for 2's
-	for (int arrRow = 1; arrRow < mazeSize-1; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize-1; arrCol++) {
-			int breakSwitch = 1;//used to break out of nested loops in Switch
-			if (mz[arrRow][arrCol] == '2') {
-				srand(time(NULL));
-				int move = rand() % 8 + 1;
-
-				switch (move) {
-					case 1: {
-						for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
-							for (int adjCol = arrCol - 1; adjCol <= arrCol + 1; adjCol++) {
-								//Only move to position with ' ' or a-y
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									//If position moved to is a plant
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';//Placeholder used to avoid extra movements per turn
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 2: {
-						for (int adjCol = arrCol - 1; adjCol <= arrCol + 1; adjCol++) {
-							for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 3: {
-						for (int adjRow = arrRow + 1; adjRow >= arrRow - 1; adjRow--) {
-							for (int adjCol = arrCol - 1; adjCol <= arrCol + 1; adjCol++) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 4: {
-						for (int adjCol = arrCol - 1; adjCol <= arrCol + 1; adjCol++) {
-							for (int adjRow = arrRow + 1; adjRow >= arrRow - 1; adjRow--) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 5: {
-						for (int adjRow = arrRow + 1; adjRow >= arrRow - 1; adjRow--) {
-							for (int adjCol = arrCol + 1; adjCol >= arrCol - 1; adjCol--) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 6: {
-						for (int adjCol = arrCol + 1; adjCol >= arrCol - 1; adjCol--) {
-							for (int adjRow = arrRow + 1; adjRow >= arrRow - 1; adjRow--) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 7: {
-						for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
-							for (int adjCol = arrCol + 1; adjCol >= arrCol - 1; adjCol--) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					case 8: {
-						for (int adjCol = arrCol + 1; adjCol >= arrCol - 1; adjCol--) {
-							for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
-								if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
-									if (mz[adjRow][adjCol] != ' ') {
-										numOfPlants--;
-									}
-									mz[adjRow][adjCol] = 'X';
-									mz[arrRow][arrCol] = ' ';
-									breakSwitch = 0;
-									break;
-								}
-							}
-							if (breakSwitch == 0) {
-								break;
-							}
-						}
-						break;
-					}
-					default:
-						break;
-				}
-			}
-		}
-	}
-	//Change placeholders to 2's
-	for (int arrRow = 1; arrRow < mazeSize-1; arrRow++) {
-		for (int arrCol = 1; arrCol < mazeSize-1; arrCol++) {
-			if (mz[arrRow][arrCol] == 'X') {
-				mz[arrRow][arrCol] = '2';
-			}
-		}
-	}
-}*/
-
-int main()
-{
-	const int numRows = 15;
-	const int numCols = 15;
+int main() {
+	
 	char  maze[numRows][numCols] = {{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
 									{block,  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',block},
 									{block,  ' ',  ' ',  ' ',block,block,block,block,  ' ',block,  ' ',block,  ' ',block,block},
@@ -391,7 +209,8 @@ int main()
 									{block,  ' ',block,block,block,block,  ' ',block,  ' ',block,  ' ',block,  ' ',  ' ',block},
 									{block,  ' ',  ' ',  ' ',  ' ',block,block,block,  ' ',block,  ' ',block,block,  ' ',block},
 									{block,  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block} };
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block} 
+	};
 	char c = 'a';
 
 	placePlant(maze, numOfPlants);
