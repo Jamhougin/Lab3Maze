@@ -1,8 +1,9 @@
 
-Lab3
+
 Lab3 3rd Yr Automatic Maze game
 
-LAB BRIEF: Lab 3 2d Life Your name and student number must be at the top of every file.
+LAB BRIEF: 
+Lab 3 2d Life Your name and student number must be at the top of every file.
 You cannot use or anything else except char ,ints and an array of chars..
 All code must be consistently indented and variables given appropriate names.
 You must upload the code to blackboard before Wednesday30th October @ 11 am even if not all the parts are completed. You will be 
