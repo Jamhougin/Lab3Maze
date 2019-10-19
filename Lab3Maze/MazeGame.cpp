@@ -76,7 +76,7 @@ void changePlants(char mz[numRows][numCols]) {
 			if (mz[arrRow][arrCol] >= 'a' && mz[arrRow][arrCol] <= 'y') {
 				canChange = 1;
 				exitLoop = 0;
-				for (int checkRow = 1; checkRow < 9; checkRow++) {
+				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
 
 					if (checkRow == arrRow) {
 						exitLoop = 1;
@@ -101,7 +101,7 @@ void changePlants(char mz[numRows][numCols]) {
 				}
 				if (canChange == 1) {
 					exitLoop = 0;
-					for (int checkCol = 1; checkCol < 9; checkCol++) {
+					for (int checkCol = 1; checkCol < numCols-1; checkCol++) {
 
 						if (checkCol == arrCol) {
 							exitLoop = 1;
@@ -208,7 +208,7 @@ int main() {
 									{block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',block,block},
 									{block,  ' ',block,block,block,block,  ' ',block,  ' ',block,  ' ',block,  ' ',  ' ',block},
 									{block,  ' ',  ' ',  ' ',  ' ',block,block,block,  ' ',block,  ' ',block,block,  ' ',block},
-									{block,  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block},
+									{block,  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block},
 									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block} 
 	};
 	char c = 'a';
