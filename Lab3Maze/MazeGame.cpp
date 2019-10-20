@@ -26,7 +26,6 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 
 void placePlant(char mz[numRows][numCols]) {
 	int count = 0;
-	srand(time(NULL));
 	while (count < numOfPlants) {
 		int row = rand() % (numRows - 1) + 1;
 		int col = rand() % (numCols - 1) + 1;
@@ -40,7 +39,6 @@ void placePlant(char mz[numRows][numCols]) {
 
 void placeWalker(char mz[numRows][numCols]) {
 	int count = 0;
-	srand(time(NULL));
 	while (count < numOfWalkers) {
 		int row = rand() % (numRows - 1) + 1;
 		int col = rand() % (numCols - 1) + 1;
@@ -96,7 +94,7 @@ void changePlants(char mz[numRows][numCols]) {
 						break;
 					}
 				}
-				//If cnaChange ==0, no need for second loop
+				//If canChange ==0, no need for second loop
 				if (canChange == 1) {
 					exitLoop = 0;
 					for (int checkCol = 1; checkCol < numCols-1; checkCol++) {
@@ -164,7 +162,6 @@ void moveWalker(char mz[numRows][numCols]) {
 				}
 				//Randomly choose free space
 				if (findSpace == 1) {
-					srand(time(NULL));
 					int row = rand() % 3 + (arrRow - 1);
 					int col = rand() % 3 + (arrCol - 1);
 					while (mz[row][col] == block || mz[row][col] == '2' || mz[row][col] == 'X') {
@@ -191,6 +188,8 @@ void moveWalker(char mz[numRows][numCols]) {
 }
 
 int main() {
+
+	srand(time(NULL));
 	
 	char  maze[numRows][numCols] = {{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
 									{block,  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',block},
