@@ -188,7 +188,7 @@ void moveWalker(char mz[numRows][numCols]) {
 }
 
 int main() {
-
+	
 	srand(time(NULL));
 	
 	char  maze[numRows][numCols] = {{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
@@ -224,6 +224,8 @@ int main() {
 	}
 	drawMaze(maze, numRows, numCols);
 	if (numOfPlants == 0) {
-		cout << "Life Simulation Complete";
+		cout << "\n\nLife Simulation Complete\n\n";
+		cout << "Enter any key to exit\n";
+		cin >> c;
 	}
 }
