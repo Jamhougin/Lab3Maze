@@ -24,10 +24,10 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 
 }
 
-void placePlant(char mz[numRows][numCols], int nOP) {
+void placePlant(char mz[numRows][numCols]) {
 	int count = 0;
 	srand(time(NULL));
-	while (count < nOP) {
+	while (count < numOfPlants) {
 		int row = rand() % (numRows - 1) + 1;
 		int col = rand() % (numCols - 1) + 1;
 
@@ -59,7 +59,7 @@ void plantsGrow(char mz[numRows][numCols], int aR, int aC) {
 			if (mz[adjRow][adjCol] == ' ') {
 				int willGrow = rand() % 10 + 1;
 				if (willGrow == 10) {
-					mz[adjRow][adjCol] = '?';
+					mz[adjRow][adjCol] = '?';//Placeholder to avoid new plant growing same turn
 					numOfPlants++;
 				}
 			}
@@ -74,8 +74,6 @@ void changePlants(char mz[numRows][numCols]) {
 	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] >= 'a' && mz[arrRow][arrCol] <= 'y') {
-				canChange = 1;
-				exitLoop = 0;
 				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
 
 					if (checkRow == arrRow) {
@@ -97,8 +95,8 @@ void changePlants(char mz[numRows][numCols]) {
 					else if (mz[checkRow][arrCol] == block && exitLoop == 1 && canChange == 1) {
 						break;
 					}
-
 				}
+				//If cnaChange ==0, no need for second loop
 				if (canChange == 1) {
 					exitLoop = 0;
 					for (int checkCol = 1; checkCol < numCols-1; checkCol++) {
@@ -122,7 +120,6 @@ void changePlants(char mz[numRows][numCols]) {
 						else if (mz[arrRow][checkCol] == block && exitLoop == 1 && canChange == 1) {
 							break;
 						}
-
 					}
 				}
 				if (canChange == 1) {
@@ -153,6 +150,7 @@ void moveWalker(char mz[numRows][numCols]) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] == '2') {
 				int findSpace = 0;
+				//Check if any free space exists
 				for (int adjRow = arrRow - 1; adjRow <= arrRow + 1; adjRow++) {
 					for (int adjCol = arrCol - 1; adjCol <= arrCol + 1; adjCol++) {
 						if (mz[adjRow][adjCol] != block && mz[adjRow][adjCol] != '2' && mz[adjRow][adjCol] != 'X') {
@@ -164,9 +162,8 @@ void moveWalker(char mz[numRows][numCols]) {
 						break;
 					}
 				}
+				//Randomly choose free space
 				if (findSpace == 1) {
-					int temp = arrRow - 1;
-					int temp2 = arrCol - 1;
 					srand(time(NULL));
 					int row = rand() % 3 + (arrRow - 1);
 					int col = rand() % 3 + (arrCol - 1);
@@ -177,7 +174,7 @@ void moveWalker(char mz[numRows][numCols]) {
 					if (mz[row][col] != ' ') {
 						numOfPlants--;
 					}
-					mz[row][col] = 'X';
+					mz[row][col] = 'X';//Placeholder to avoid double movement
 					mz[arrRow][arrCol] = ' ';
 				}
 			}
@@ -213,7 +210,7 @@ int main() {
 	};
 	char c = 'a';
 
-	placePlant(maze, numOfPlants);
+	placePlant(maze);
 	placeWalker(maze);
 
 	cout << "Do you want plants to grow? Enter y for yes\n";
@@ -230,5 +227,4 @@ int main() {
 	if (numOfPlants == 0) {
 		cout << "Life Simulation Complete";
 	}
-
 }
