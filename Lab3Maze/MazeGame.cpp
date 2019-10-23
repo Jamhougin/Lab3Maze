@@ -67,7 +67,7 @@ void plantsGrow(char mz[numRows][numCols], int aR, int aC) {
 
 void changePlants(char mz[numRows][numCols]) {
 	int canChange = 1;
-	int exitLoop = 0;
+	int plantReached = 0;
 
 	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
@@ -75,47 +75,47 @@ void changePlants(char mz[numRows][numCols]) {
 				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
 
 					if (checkRow == arrRow) {
-						exitLoop = 1;
+						plantReached = 1;
 					}
 					if (checkRow == arrRow && canChange == 0) {
 						break;
 					}
-					else if (mz[checkRow][arrCol] == '2' && exitLoop == 0) {
+					else if (mz[checkRow][arrCol] == '2' && plantReached == 0) {
 						canChange = 0;
 					}
-					else if (mz[checkRow][arrCol] == block && exitLoop == 0) {
+					else if (mz[checkRow][arrCol] == block && plantReached == 0) {
 						canChange = 1;
 					}
-					else if (mz[checkRow][arrCol] == '2' && exitLoop == 1) {
+					else if (mz[checkRow][arrCol] == '2' && plantReached == 1) {
 						canChange = 0;
 						break;
 					}
-					else if (mz[checkRow][arrCol] == block && exitLoop == 1 && canChange == 1) {
+					else if (mz[checkRow][arrCol] == block && plantReached == 1 && canChange == 1) {
 						break;
 					}
 				}
 				//If canChange ==0, no need for second loop
 				if (canChange == 1) {
-					exitLoop = 0;
+					plantReached = 0;
 					for (int checkCol = 1; checkCol < numCols-1; checkCol++) {
 
 						if (checkCol == arrCol) {
-							exitLoop = 1;
+							plantReached = 1;
 						}
 						if (checkCol == arrCol && canChange == 0) {
 							break;
 						}
-						else if (mz[arrRow][checkCol] == '2' && exitLoop == 0) {
+						else if (mz[arrRow][checkCol] == '2' && plantReached == 0) {
 							canChange = 0;
 						}
-						else if (mz[arrRow][checkCol] == block && exitLoop == 0) {
+						else if (mz[arrRow][checkCol] == block && plantReached == 0) {
 							canChange = 1;
 						}
-						else if (mz[arrRow][checkCol] == '2' && exitLoop == 1) {
+						else if (mz[arrRow][checkCol] == '2' && plantReached == 1) {
 							canChange = 0;
 							break;
 						}
-						else if (mz[arrRow][checkCol] == block && exitLoop == 1 && canChange == 1) {
+						else if (mz[arrRow][checkCol] == block && plantReached == 1 && canChange == 1) {
 							break;
 						}
 					}
