@@ -137,6 +137,7 @@ void changePlants(char mz[numRows][numCols]) {
 	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] >= 'a' && mz[arrRow][arrCol] <= 'y') {
+				plantReached = 0;
 				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
 
 					if (checkRow == arrRow) {
