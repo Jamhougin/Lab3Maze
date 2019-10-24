@@ -10,6 +10,7 @@ int numOfPlants = 10;
 int numOfWalkers = 15;
 char plantsCanGrow = 'a';
 char block = 219;
+char ground = ' ';
 
 void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 	for (int row = 0; row < numRows; row++)
@@ -20,6 +21,70 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 			cout << mz[row][col];
 		}
 		cout << endl;
+	}
+
+}
+
+void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
+	int chance = rand() % 10;
+
+	for (int row = 2; row < numRows - 2; row += 2) {
+		for (int col = 3; col < numCols - 3; col += 2) {
+			chance = rand() % 10;
+			int count = 0;
+
+			if (mz[row - 1][col] == block) count++;
+			if (mz[row + 1][col] == block) count++;
+			if (mz[row][col - 1] == block) count++;
+			if (mz[row][col + 1] == block) count++;
+			if (chance / count < 3) mz[row][col] = ground;
+		}
+	}
+	for (int row = 3; row < numRows - 3; row += 2) {
+		for (int col = 2; col < numCols - 2; col += 2) {
+			chance = rand() % 10;
+			int count = 0;
+
+			if (mz[row - 1][col] == block) count++;
+			if (mz[row + 1][col] == block) count++;
+			if (mz[row][col - 1] == block) count++;
+			if (mz[row][col + 1] == block) count++;
+			if (chance / count < 3) mz[row][col] = ground;
+		}
+	}
+	for (int col = 1; col < numCols - 1; col++) {
+		mz[1][col] = ground;
+		mz[numRows - 2][col] = ground;
+
+	}
+	for (int row = 1; row < numCols - 1; row++) {
+		mz[row][1] = ground;
+		mz[row][numCols - 2] = ground;
+	}
+	for (int row = 2; row < numRows - 2; row++) {
+		for (int col = 2; col < numCols - 2; col++) {
+			if (mz[row - 1][col] == block && mz[row + 1][col] == block && mz[row][col - 1] == block && mz[row][col + 1] == block) {
+				int rowOrCol = rand() % 2;
+				if (rowOrCol == 0) {
+					int rowC = rand() % 2;
+					if (rowC == 0) {
+						mz[row - 1][col] = ground;
+					}
+					else {
+						mz[row + 1][col] = ground;
+					}
+				}
+				else {
+					int colC = rand() % 2;
+					if (colC == 0) {
+						mz[row][col - 1] = ground;
+					}
+					else {
+						mz[row][col + 1] = ground;
+					}
+				}
+			}
+		}
 	}
 
 }
@@ -191,23 +256,50 @@ int main() {
 	
 	srand(time(NULL));
 	
-	char  maze[numRows][numCols] = {{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',block},
-									{block,  ' ',  ' ',  ' ',block,block,block,block,  ' ',block,  ' ',block,  ' ',block,block},
-									{block,  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block},
-									{block,  ' ',block,block,block,block,  ' ',block,  ' ',block,block,  ' ',block,  ' ',block},
-									{block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block,  ' ',block},
-									{block,  ' ',block,block,block,block,block,block,  ' ',block,block,  ' ',block,  ' ',block},
-									{block,  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',block},
-									{block,  ' ',block,  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',block,block,  ' ',block},
-									{block,  ' ',block,block,block,  ' ',block,block,  ' ',block,block,block,  ' ',  ' ',block},
-									{block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',block,block},
-									{block,  ' ',block,block,block,block,  ' ',block,  ' ',block,  ' ',block,  ' ',  ' ',block},
-									{block,  ' ',  ' ',  ' ',  ' ',block,block,block,  ' ',block,  ' ',block,block,  ' ',block},
-									{block,  ' ',  ' ',block,  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block} 
+	char  mazeO[numRows][numCols] = { {block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
+									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block}
 	};
+
+	char maze[numRows][numCols] = { 0 };
+
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++) {
+			maze[row][col] = mazeO[row][col];
+		}
+	}
+
 	char c = 'a';
+	char keepMaze = 'n';
+
+	genMaze(maze, numRows, numCols);
+	drawMaze(maze, numRows, numCols);
+	cout << "Are you happy with the maze? Enter y for yes\n";
+	cin >> keepMaze;
+
+	while (keepMaze != 'y') {
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numCols; col++) {
+				maze[row][col] = mazeO[row][col];
+			}
+		}
+		genMaze(maze, numRows, numCols);
+		drawMaze(maze, numRows, numCols);
+		cout << "Are you happy with the maze? Enter y for yes\n";
+		cin >> keepMaze;
+	}
 
 	placePlant(maze);
 	placeWalker(maze);
