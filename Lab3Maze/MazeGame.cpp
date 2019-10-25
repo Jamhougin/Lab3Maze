@@ -22,7 +22,6 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 		}
 		cout << endl;
 	}
-
 }
 
 void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
@@ -59,7 +58,7 @@ void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
 			mz[1][col] = ground;
 			mz[numRows - 2][col] = ground;
 	}
-	for (int row = 1; row < numCols - 1; row++) {
+	for (int row = 1; row < numRows - 1; row++) {
 			mz[row][1] = ground;
 			mz[row][numCols - 2] = ground;
 	}
@@ -89,7 +88,6 @@ void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
 			}
 		}
 	}
-
 }
 
 void placePlant(char mz[numRows][numCols]) {
@@ -262,22 +260,19 @@ int main() {
 	
 	srand(time(NULL));
 	
-	char  mazeO[numRows][numCols] = { {block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,ground,block,ground,block,ground,block,ground,block,ground,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block},
-									{block,block,block,block,block,block,block,block,block,block,block,block,block,block,block}
-	};
+	char mazeO[numRows][numCols] = {};
+
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++) {
+			mazeO[row][col] = block;
+		}
+	}
+
+	for (int row = 3; row < numRows - 2; row += 2) {
+		for (int col = 3; col < numCols - 2; col += 2) {
+			mazeO[row][col] = ground;
+		}
+	}
 
 	char maze[numRows][numCols] = { 0 };
 
