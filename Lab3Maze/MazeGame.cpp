@@ -26,7 +26,7 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 }
 
 void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
-	int chance = rand() % 10;
+	int chance = 0;
 
 	for (int row = 2; row < numRows - 2; row += 2) {
 		for (int col = 3; col < numCols - 3; col += 2) {
@@ -37,6 +37,8 @@ void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
 			if (mz[row + 1][col] == block) count++;
 			if (mz[row][col - 1] == block) count++;
 			if (mz[row][col + 1] == block) count++;
+			//The higher the wall count surrounding a cell, 
+			//the higher the chance of ground being placed. count = 4 -> 100% chance 
 			if (chance / count < 3) mz[row][col] = ground;
 		}
 	}
@@ -52,15 +54,16 @@ void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
 			if (chance / count < 3) mz[row][col] = ground;
 		}
 	}
+	//Draw edge maze ground
 	for (int col = 1; col < numCols - 1; col++) {
-		mz[1][col] = ground;
-		mz[numRows - 2][col] = ground;
-
+			mz[1][col] = ground;
+			mz[numRows - 2][col] = ground;
 	}
 	for (int row = 1; row < numCols - 1; row++) {
-		mz[row][1] = ground;
-		mz[row][numCols - 2] = ground;
+			mz[row][1] = ground;
+			mz[row][numCols - 2] = ground;
 	}
+	//Search for lone cells and connect to other cells
 	for (int row = 2; row < numRows - 2; row++) {
 		for (int col = 2; col < numCols - 2; col++) {
 			if (mz[row - 1][col] == block && mz[row + 1][col] == block && mz[row][col - 1] == block && mz[row][col + 1] == block) {
@@ -122,7 +125,7 @@ void plantsGrow(char mz[numRows][numCols], int aR, int aC) {
 			if (mz[adjRow][adjCol] == ' ') {
 				int willGrow = rand() % 10 + 1;
 				if (willGrow == 10) {
-					mz[adjRow][adjCol] = '?';//Placeholder to avoid new plant growing same turn
+					mz[adjRow][adjCol] = '?';//Placeholder to avoid new plant being checked same turn
 					numOfPlants++;
 				}
 			}
@@ -141,23 +144,23 @@ void changePlants(char mz[numRows][numCols]) {
 				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
 
 					if (checkRow == arrRow) {
-						plantReached = 1;
+						plantReached = 1;//Checking Plant has been reached in Row
 					}
 					if (checkRow == arrRow && canChange == 0) {
-						break;
+						break;//Plant sees Walker
 					}
 					else if (mz[checkRow][arrCol] == '2' && plantReached == 0) {
-						canChange = 0;
+						canChange = 0;//Plant might see walker
 					}
 					else if (mz[checkRow][arrCol] == block && plantReached == 0) {
-						canChange = 1;
+						canChange = 1;//Plant might not see walker
 					}
 					else if (mz[checkRow][arrCol] == '2' && plantReached == 1) {
 						canChange = 0;
-						break;
+						break;//Plant sees Walker
 					}
 					else if (mz[checkRow][arrCol] == block && plantReached == 1 && canChange == 1) {
-						break;
+						break;//Plant can't see Walker in Row
 					}
 				}
 				//If canChange ==0, no need for second loop
@@ -169,7 +172,7 @@ void changePlants(char mz[numRows][numCols]) {
 							plantReached = 1;
 						}
 						if (checkCol == arrCol && canChange == 0) {
-							break;
+							break;//Plant sees Walker
 						}
 						else if (mz[arrRow][checkCol] == '2' && plantReached == 0) {
 							canChange = 0;
@@ -179,10 +182,10 @@ void changePlants(char mz[numRows][numCols]) {
 						}
 						else if (mz[arrRow][checkCol] == '2' && plantReached == 1) {
 							canChange = 0;
-							break;
+							break;//Plant sees Walker
 						}
 						else if (mz[arrRow][checkCol] == block && plantReached == 1 && canChange == 1) {
-							break;
+							break;//Plant can't see Walker in Col
 						}
 					}
 				}
@@ -193,6 +196,7 @@ void changePlants(char mz[numRows][numCols]) {
 					else {
 						mz[arrRow][arrCol]--;
 					}
+					//Plant mutation dealt with here
 					if (plantsCanGrow == 'y') {
 						plantsGrow(mz, arrRow, arrCol);
 					}
@@ -200,6 +204,7 @@ void changePlants(char mz[numRows][numCols]) {
 			}
 		}
 	}
+	//Change placeholders to plants
 	for (int arrRow = 1; arrRow < numRows - 1; arrRow++) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] == '?') {
