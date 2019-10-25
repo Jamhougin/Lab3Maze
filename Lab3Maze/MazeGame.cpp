@@ -12,7 +12,7 @@ char plantsCanGrow = 'a';
 char block = 219;
 char ground = ' ';
 
-void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
+void drawMaze(char mz[numRows][numCols]) {
 	for (int row = 0; row < numRows; row++)
 	{
 		cout << "	";
@@ -24,7 +24,29 @@ void drawMaze(char mz[numRows][numCols], int numRows, int numCols) {
 	}
 }
 
-void genMaze(char mz[numRows][numCols], int numRows, int numCols) {
+void genBaseMaze(char mz[numRows][numCols]) {
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++) {
+			mz[row][col] = block;
+		}
+	}
+
+	for (int row = 3; row < numRows - 2; row += 2) {
+		for (int col = 3; col < numCols - 2; col += 2) {
+			mz[row][col] = ground;
+		}
+	}
+}
+
+void copyArr(char mzO[numRows][numCols], char mz[numRows][numCols]) {
+	for (int row = 0; row < numRows; row++) {
+		for (int col = 0; col < numCols; col++) {
+			mz[row][col] = mzO[row][col];
+		}
+	}
+}
+
+void genMaze(char mz[numRows][numCols]) {
 	int chance = 0;
 
 	for (int row = 2; row < numRows - 2; row += 2) {
@@ -261,43 +283,22 @@ int main() {
 	srand(time(NULL));
 	
 	char mazeO[numRows][numCols] = {};
+	char maze[numRows][numCols] = {};
 
-	for (int row = 0; row < numRows; row++) {
-		for (int col = 0; col < numCols; col++) {
-			mazeO[row][col] = block;
-		}
-	}
+	genBaseMaze(mazeO);
+	copyArr(mazeO, maze);
+	genMaze(maze);
+	drawMaze(maze);
 
-	for (int row = 3; row < numRows - 2; row += 2) {
-		for (int col = 3; col < numCols - 2; col += 2) {
-			mazeO[row][col] = ground;
-		}
-	}
-
-	char maze[numRows][numCols] = { 0 };
-
-	for (int row = 0; row < numRows; row++) {
-		for (int col = 0; col < numCols; col++) {
-			maze[row][col] = mazeO[row][col];
-		}
-	}
-
-	char c = 'a';
+	char cont = 'a';
 	char keepMaze = 'n';
-
-	genMaze(maze, numRows, numCols);
-	drawMaze(maze, numRows, numCols);
 	cout << "Are you happy with the maze? Enter y for yes\n";
 	cin >> keepMaze;
 
 	while (keepMaze != 'y') {
-		for (int row = 0; row < numRows; row++) {
-			for (int col = 0; col < numCols; col++) {
-				maze[row][col] = mazeO[row][col];
-			}
-		}
-		genMaze(maze, numRows, numCols);
-		drawMaze(maze, numRows, numCols);
+		copyArr(mazeO, maze);
+		genMaze(maze);
+		drawMaze(maze);
 		cout << "Are you happy with the maze? Enter y for yes\n";
 		cin >> keepMaze;
 	}
@@ -308,17 +309,17 @@ int main() {
 	cout << "Do you want plants to grow? Enter y for yes\n";
 	cin >> plantsCanGrow;
 
-	while (c != 'x' && numOfPlants != 0)
+	while (cont != 'x' && numOfPlants != 0)
 	{
-		drawMaze(maze, numRows, numCols);
+		drawMaze(maze);
 		changePlants(maze);
 		moveWalker(maze);
-		cin >> c;
+		cin >> cont;
 	}
-	drawMaze(maze, numRows, numCols);
+	drawMaze(maze);
 	if (numOfPlants == 0) {
 		cout << "\n\nLife Simulation Complete\n\n";
 		cout << "Enter any key to exit\n";
-		cin >> c;
+		cin >> cont;
 	}
 }
