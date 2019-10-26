@@ -1,29 +1,47 @@
 #include <iostream>
 #include <ctime>
-
+#include <windows.h>
 
 using namespace std;
 
-const int numRows = 15;
-const int numCols = 15;
-int numOfPlants = 10;
-int numOfWalkers = 15;
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+const int numRows = 25;
+const int numCols = 35;
+int numOfPlants = 15;
+int numOfWalkers = 55;
 char plantsCanGrow = 'a';
 char block = 219;
 char ground = ' ';
 
 void drawMaze(char mz[numRows][numCols]) {
+
 	for (int row = 0; row < numRows; row++)
 	{
 		cout << "	";
 		for (int col = 0; col < numCols; col++)
 		{
-			cout << mz[row][col];
+			if (mz[row][col] >= 'a' && mz[row][col] <= 'y') {
+				SetConsoleTextAttribute(hConsole, 10);
+				cout << mz[row][col];
+				SetConsoleTextAttribute(hConsole, 15);
+			}
+			else if (mz[row][col] == '2') {
+				SetConsoleTextAttribute(hConsole, 6);
+				cout << mz[row][col];
+				SetConsoleTextAttribute(hConsole, 15);
+			}
+			else {
+				SetConsoleTextAttribute(hConsole, 8);
+				cout << mz[row][col];
+				SetConsoleTextAttribute(hConsole, 15);
+			}
 		}
 		cout << endl;
 	}
 }
 
+//Use to generate the basic cell structure that genMaze() relies on
 void genBaseMaze(char mz[numRows][numCols]) {
 	for (int row = 0; row < numRows; row++) {
 		for (int col = 0; col < numCols; col++) {
@@ -59,8 +77,8 @@ void genMaze(char mz[numRows][numCols]) {
 			if (mz[row][col - 1] == block) count++;
 			if (mz[row][col + 1] == block) count++;
 			//The higher the wall count surrounding a cell, 
-			//the higher the chance of ground being placed. count = 4 -> 100% chance 
-			if (chance / count < 3) mz[row][col] = ground;
+			//the higher the chance of ground being placed. 
+			if (count > 1 && chance / count < 3) mz[row][col] = ground;
 		}
 	}
 	for (int row = 3; row < numRows - 3; row += 2) {
@@ -72,7 +90,7 @@ void genMaze(char mz[numRows][numCols]) {
 			if (mz[row + 1][col] == block) count++;
 			if (mz[row][col - 1] == block) count++;
 			if (mz[row][col + 1] == block) count++;
-			if (chance / count < 3) mz[row][col] = ground;
+			if (count > 1 && chance / count < 3) mz[row][col] = ground;
 		}
 	}
 	//Draw edge maze ground
@@ -84,27 +102,40 @@ void genMaze(char mz[numRows][numCols]) {
 			mz[row][1] = ground;
 			mz[row][numCols - 2] = ground;
 	}
-	//Search for lone cells and connect to other cells
-	for (int row = 2; row < numRows - 2; row++) {
-		for (int col = 2; col < numCols - 2; col++) {
-			if (mz[row - 1][col] == block && mz[row + 1][col] == block && mz[row][col - 1] == block && mz[row][col + 1] == block) {
+	//Search for lone cells and rare isolated 3 cell areas, and connect to other cells
+	//The large compound if was necessary to catch the 3 cell areas that were unconnected
+	for (int row = 3; row < numRows - 3; row++) {
+		for (int col = 3; col < numCols - 3; col++) {
+			if (mz[row][col] == ground && (mz[row - 1][col] == block || mz[row - 3][col] == block) && (mz[row + 1][col] == block || mz[row + 3][col] == block) && (mz[row][col - 1] == block || mz[row][col - 3] == block) && (mz[row][col + 1] == block || mz[row][col + 3] == block)) {
 				int rowOrCol = rand() % 2;
 				if (rowOrCol == 0) {
 					int rowC = rand() % 2;
 					if (rowC == 0) {
 						mz[row - 1][col] = ground;
+						mz[row - 2][col] = ground;
+						mz[row - 2][col - 1] = ground;
+						mz[row - 2][col - 2] = ground;
 					}
 					else {
 						mz[row + 1][col] = ground;
+						mz[row + 2][col] = ground;
+						mz[row + 2][col + 1] = ground;
+						mz[row + 2][col + 2] = ground;
 					}
 				}
 				else {
 					int colC = rand() % 2;
 					if (colC == 0) {
 						mz[row][col - 1] = ground;
+						mz[row][col - 2] = ground;
+						mz[row - 1][col - 2] = ground;
+						mz[row - 2][col - 2] = ground;
 					}
 					else {
 						mz[row][col + 1] = ground;
+						mz[row][col + 2] = ground;
+						mz[row + 1][col + 2] = ground;
+						mz[row + 2][col + 2] = ground;
 					}
 				}
 			}
@@ -318,7 +349,9 @@ int main() {
 	}
 	drawMaze(maze);
 	if (numOfPlants == 0) {
+		SetConsoleTextAttribute(hConsole, 12);
 		cout << "\n\nLife Simulation Complete\n\n";
+		SetConsoleTextAttribute(hConsole, 15);
 		cout << "Enter any key to exit\n";
 		cin >> cont;
 	}
