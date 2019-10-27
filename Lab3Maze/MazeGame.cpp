@@ -192,50 +192,51 @@ void changePlants(char mz[numRows][numCols]) {
 		for (int arrCol = 1; arrCol < numCols - 1; arrCol++) {
 			if (mz[arrRow][arrCol] >= 'a' && mz[arrRow][arrCol] <= 'y') {
 				plantReached = 0;
-				for (int checkRow = 1; checkRow < numRows-1; checkRow++) {
+				canChange = 1;
+				for (int checkRow = 1; checkRow < numCols-1; checkRow++) {
 
-					if (checkRow == arrRow) {
+					if (checkRow == arrCol) {
 						plantReached = 1;//Checking Plant has been reached in Row
 					}
-					if (checkRow == arrRow && canChange == 0) {
+					if (checkRow == arrCol && canChange == 0) {
 						break;//Plant sees Walker
 					}
-					else if (mz[checkRow][arrCol] == '2' && plantReached == 0) {
+					else if (mz[arrRow][checkRow] == '2' && plantReached == 0) {
 						canChange = 0;//Plant might see walker
 					}
-					else if (mz[checkRow][arrCol] == block && plantReached == 0) {
+					else if (mz[arrRow][checkRow] == block && plantReached == 0) {
 						canChange = 1;//Plant might not see walker
 					}
-					else if (mz[checkRow][arrCol] == '2' && plantReached == 1) {
+					else if (mz[arrRow][checkRow] == '2' && plantReached == 1) {
 						canChange = 0;
 						break;//Plant sees Walker
 					}
-					else if (mz[checkRow][arrCol] == block && plantReached == 1 && canChange == 1) {
+					else if (mz[arrRow][checkRow] == block && plantReached == 1 && canChange == 1) {
 						break;//Plant can't see Walker in Row
 					}
 				}
 				//If canChange ==0, no need for second loop
 				if (canChange == 1) {
 					plantReached = 0;
-					for (int checkCol = 1; checkCol < numCols-1; checkCol++) {
+					for (int checkCol = 1; checkCol < numRows-1; checkCol++) {
 
-						if (checkCol == arrCol) {
+						if (checkCol == arrRow) {
 							plantReached = 1;
 						}
-						if (checkCol == arrCol && canChange == 0) {
+						if (checkCol == arrRow && canChange == 0) {
 							break;//Plant sees Walker
 						}
-						else if (mz[arrRow][checkCol] == '2' && plantReached == 0) {
+						else if (mz[checkCol][arrCol] == '2' && plantReached == 0) {
 							canChange = 0;
 						}
-						else if (mz[arrRow][checkCol] == block && plantReached == 0) {
+						else if (mz[checkCol][arrCol] == block && plantReached == 0) {
 							canChange = 1;
 						}
-						else if (mz[arrRow][checkCol] == '2' && plantReached == 1) {
+						else if (mz[checkCol][arrCol] == '2' && plantReached == 1) {
 							canChange = 0;
 							break;//Plant sees Walker
 						}
-						else if (mz[arrRow][checkCol] == block && plantReached == 1 && canChange == 1) {
+						else if (mz[checkCol][arrCol] == block && plantReached == 1 && canChange == 1) {
 							break;//Plant can't see Walker in Col
 						}
 					}
