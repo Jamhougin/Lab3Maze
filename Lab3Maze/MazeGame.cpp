@@ -7,7 +7,7 @@ using namespace std;
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 const int numRows = 25;
-const int numCols = 35;
+const int numCols = 65;
 int numOfPlants = 15;
 int numOfWalkers = 55;
 char plantsCanGrow = 'a';
@@ -67,8 +67,10 @@ void copyArr(char mzO[numRows][numCols], char mz[numRows][numCols]) {
 void genMaze(char mz[numRows][numCols]) {
 	int chance = 0;
 
-	for (int row = 2; row < numRows - 2; row += 2) {
-		for (int col = 3; col < numCols - 3; col += 2) {
+	int colN = 3;
+	for (int row = 2; row < numRows - 2; row++) {
+
+		for (int col = colN; col < numCols - colN; col += 2) {
 			chance = rand() % 10;
 			int count = 0;
 
@@ -76,22 +78,12 @@ void genMaze(char mz[numRows][numCols]) {
 			if (mz[row + 1][col] == block) count++;
 			if (mz[row][col - 1] == block) count++;
 			if (mz[row][col + 1] == block) count++;
-			//The higher the wall count surrounding a cell, 
-			//the higher the chance of ground being placed. 
-			if (count > 1 && chance / count < 3) mz[row][col] = ground;
+			if (count > 1 && (chance / count < 3)) mz[row][col] = ground;
 		}
-	}
-	for (int row = 3; row < numRows - 3; row += 2) {
-		for (int col = 2; col < numCols - 2; col += 2) {
-			chance = rand() % 10;
-			int count = 0;
-
-			if (mz[row - 1][col] == block) count++;
-			if (mz[row + 1][col] == block) count++;
-			if (mz[row][col - 1] == block) count++;
-			if (mz[row][col + 1] == block) count++;
-			if (count > 1 && chance / count < 3) mz[row][col] = ground;
+		if (colN == 3) {
+			colN = 2;
 		}
+		else colN = 3;
 	}
 	//Draw edge maze ground
 	for (int col = 1; col < numCols - 1; col++) {
