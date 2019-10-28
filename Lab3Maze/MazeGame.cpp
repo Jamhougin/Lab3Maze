@@ -6,9 +6,9 @@ using namespace std;
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-const int numRows = 25;
-const int numCols = 65;
-int numOfPlants = 15;
+const int numRows = 25;//Must be odd number, >=5
+const int numCols = 65;//Must be odd number, >=5
+int numOfPlants = 20;
 int numOfWalkers = 55;
 char plantsCanGrow = 'a';
 char block = 219;
@@ -41,7 +41,7 @@ void drawMaze(char mz[numRows][numCols]) {
 	}
 }
 
-//Use to generate the basic cell structure that genMaze() relies on
+//Used to generate the basic cell structure that genMaze() relies on
 void genBaseMaze(char mz[numRows][numCols]) {
 	for (int row = 0; row < numRows; row++) {
 		for (int col = 0; col < numCols; col++) {
@@ -66,19 +66,16 @@ void copyArr(char mzO[numRows][numCols], char mz[numRows][numCols]) {
 
 void genMaze(char mz[numRows][numCols]) {
 	int chance = 0;
-
+	//The below variable can be raised or lowered to increase or decrease the
+	//amount of walls in the maze. A very low number increases chance of unreachable areas
+	int chanceCheckNum = 5;
 	int colN = 3;
+
 	for (int row = 2; row < numRows - 2; row++) {
 
 		for (int col = colN; col < numCols - colN; col += 2) {
 			chance = rand() % 10;
-			int count = 0;
-
-			if (mz[row - 1][col] == block) count++;
-			if (mz[row + 1][col] == block) count++;
-			if (mz[row][col - 1] == block) count++;
-			if (mz[row][col + 1] == block) count++;
-			if (count > 1 && (chance / count < 3)) mz[row][col] = ground;
+			if (chance < chanceCheckNum) mz[row][col] = ground;
 		}
 		if (colN == 3) {
 			colN = 2;
@@ -100,10 +97,12 @@ void genMaze(char mz[numRows][numCols]) {
 		for (int col = 3; col < numCols - 3; col++) {
 			if (mz[row][col] == ground && (mz[row - 1][col] == block || mz[row - 3][col] == block) && (mz[row + 1][col] == block || mz[row + 3][col] == block) && (mz[row][col - 1] == block || mz[row][col - 3] == block) && (mz[row][col + 1] == block || mz[row][col + 3] == block)) {
 				int rowOrCol = rand() % 2;
+				//Creates an L shape that will break through to rest of maze
+				//rowOrCol randomises direction of L
 				if (rowOrCol == 0) {
 					int rowC = rand() % 2;
 					if (rowC == 0) {
-						mz[row - 1][col] = ground;
+						mz[row - 1][col] = ground; 
 						mz[row - 2][col] = ground;
 						mz[row - 2][col - 1] = ground;
 						mz[row - 2][col - 2] = ground;
@@ -283,7 +282,7 @@ void moveWalker(char mz[numRows][numCols]) {
 						row = rand() % 3 + (arrRow - 1);
 						col = rand() % 3 + (arrCol - 1);
 					}
-					if (mz[row][col] != ' ') {
+					if (mz[row][col] != ' ') {//Tidier than defining range a->y
 						numOfPlants--;
 					}
 					mz[row][col] = 'X';//Placeholder to avoid double movement
@@ -316,21 +315,21 @@ int main() {
 
 	char cont = 'a';
 	char keepMaze = 'n';
-	cout << "Are you happy with the maze? Enter y for yes\n";
+	cout << "\n	Are you happy with the maze? Enter y for yes\n	";
 	cin >> keepMaze;
 
 	while (keepMaze != 'y') {
 		copyArr(mazeO, maze);
 		genMaze(maze);
 		drawMaze(maze);
-		cout << "Are you happy with the maze? Enter y for yes\n";
+		cout << "\n	Are you happy with the maze? Enter y for yes\n	";
 		cin >> keepMaze;
 	}
 
 	placePlant(maze);
 	placeWalker(maze);
 
-	cout << "Do you want plants to grow? Enter y for yes\n";
+	cout << "\n	Do you want plants to grow? Enter y for yes\n	";
 	cin >> plantsCanGrow;
 
 	while (cont != 'x' && numOfPlants != 0)
@@ -343,9 +342,9 @@ int main() {
 	drawMaze(maze);
 	if (numOfPlants == 0) {
 		SetConsoleTextAttribute(hConsole, 12);
-		cout << "\n\nLife Simulation Complete\n\n";
+		cout << "\n\n	Life Simulation Complete\n\n";
 		SetConsoleTextAttribute(hConsole, 15);
-		cout << "Enter any key to exit\n";
+		cout << "	Enter any key to exit\n	";
 		cin >> cont;
 	}
 }
