@@ -303,7 +303,7 @@ void moveWalker(char mz[numRows][numCols]) {
 
 int main() {
 	
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	
 	char mazeO[numRows][numCols] = {};
 	char maze[numRows][numCols] = {};
